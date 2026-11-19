@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-navy-950: #050c30;
+  --color-navy-900: #0a1a5c;
+  --color-navy-800: #102a86;
+  --color-navy-700: #1a3aa8;
+  --color-gold-500: #e3a419;
+  --color-gold-400: #f0b92e;
+  --color-gold-300: #f6cb55;
+  --color-cream: #fff8e6;
+  --color-brand-red: #d92027;
+  --font-sans: 'Poppins', sans-serif;
+  --font-display: 'Unbounded', sans-serif;
+
+  --animate-kenburns: kenburns 18s ease-in-out infinite alternate;
+  --animate-marquee: marquee 60s linear infinite;
+  --animate-panel-in: panel-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-fade-up: fade-up 0.8s ease both;
+  --animate-sheen: sheen 4s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes kenburns { from { scale: 1.02; } to { scale: 1.16; } }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes panel-in { from { opacity: 0; translate: 80px 0; } to { opacity: 1; translate: 0 0; } }
+  @keyframes fade-up { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
+  @keyframes sheen { from { background-position: 0 -200%; } to { background-position: 0 300%; } }
+  @keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+}
+
+html { scroll-behavior: smooth; }
+body { color: var(--color-navy-900); background: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
