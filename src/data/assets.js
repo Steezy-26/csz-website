@@ -7,20 +7,15 @@ export const asset = (path) => ASSET_BASE + path
 // Member logos live in public/images/members, named exactly as in members.js
 export const memberLogo = (file) => '/images/members/' + file
 
-// The hero pictures, grouped by slanted panel. A panel with two pictures cross-fades between them.
-// `pos` is the focal point (x y) so the important part of the photo stays in view.
-export const heroPanels = [
-  [
-    { src: '/images/hero/hero-hall.jpg', alt: 'Delegates with laptops at a CSZ Summer School session', pos: '60% 40%' },
-    { src: '/images/hero/hero-panel.jpg', alt: 'Speakers in a panel discussion at a CSZ event', pos: '58% 50%' },
-  ],
-  [
-    { src: '/images/hero/hero-servers.jpg', alt: 'A woman holding a laptop in front of server racks', pos: '80% 40%' },
-    { src: '/images/hero/hero-circuit.jpg', alt: 'Close-up of a computer circuit board', pos: '50% 40%' },
-  ],
-  [
-    { src: '/images/hero/hero-question.jpg', alt: 'A delegate asking a question at a CSZ event', pos: '40% 40%' },
-  ],
+// The hero slideshow: one big picture at a time, in this order.
+// pos    = focal point (x y) so the important part of the photo stays in view
+// origin = where the slow zoom starts from
+export const heroSlides = [
+  { src: '/images/hero/hero-hall.jpg', alt: 'Delegates with laptops at a CSZ Summer School session', pos: '60% 40%', origin: '60% 40%' },
+  { src: '/images/hero/hero-servers.jpg', alt: 'A woman holding a laptop in front of server racks', pos: '78% 40%', origin: '75% 45%' },
+  { src: '/images/hero/hero-question.jpg', alt: 'A delegate asking a question at a CSZ event', pos: '40% 40%', origin: '40% 40%' },
+  { src: '/images/hero/hero-circuit.jpg', alt: 'Close-up of a computer circuit board', pos: '50% 45%', origin: '50% 50%' },
+  { src: '/images/hero/hero-panel.jpg', alt: 'Speakers in a panel discussion at a CSZ event', pos: '58% 50%', origin: '60% 50%' },
 ]
 
 // Other files the download script copies from the old site

@@ -8,106 +8,128 @@ import Reveal from '@/components/Reveal'
 import CountUp from '@/components/CountUp'
 import Marquee from '@/components/Marquee'
 import MessageCard from '@/components/MessageCard'
-import { heroPanels, memberLogo } from '@/data/assets'
+import { heroSlides, memberLogo } from '@/data/assets'
 import { institutionalMembers } from '@/data/members'
 import { events, dateParts, fmtDate } from '@/data/content'
 import { quickAccess } from '@/data/site'
 
-const TICK_MS = 4500 // how often the hero changes (milliseconds)
+const TICK_MS = 5500 // how long each hero picture stays (milliseconds)
 const goldButton = 'inline-flex items-center gap-2 rounded-full bg-linear-to-r from-gold-500 to-gold-300 px-6 py-3 font-bold text-navy-950 shadow-lg transition hover:brightness-110'
 
-/* ---------- Hero with three slanted, animated picture panels ---------- */
+/* ---------- Hero: one big picture at a time, changing through all five ---------- */
 
-function HeroPanels({ tick, spotlight, onPick }) {
+// Each picture enters with a different wipe, in turn
+const reveals = ['animate-reveal-right', 'animate-reveal-up', 'animate-reveal-circle']
+
+function HeroSlides({ index, prev, goTo }) {
   return (
-    <div className='relative flex h-72 sm:h-96 lg:-mr-[6vw] lg:h-[28rem]'>
-      {heroPanels.map((playlist, i) => {
-        // Panels with two pictures swap on their own beat, so they never change at the same moment
-        const current = playlist.length > 1 ? Math.floor((tick + i) / 2) % playlist.length : 0
-        const active = spotlight === i
-        return (
-          <div
-            key={i}
-            onPointerEnter={() => onPick(i)}
-            className='relative -mr-4 h-full min-w-0 -skew-x-6 animate-panel-in overflow-hidden border-l-[5px] border-gold-300 shadow-2xl transition-[flex-grow,filter] duration-700'
-            style={{
-              animationDelay: `${0.25 + i * 0.2}s`,
-              flexBasis: 0,
-              flexGrow: active ? 1.5 : 1,
-              filter: active ? 'brightness(1.1) saturate(1.1)' : 'brightness(0.75)',
-            }}
-          >
-            <div className='absolute inset-0 bg-linear-to-br from-navy-700 to-navy-950' />
-            {playlist.map((p, j) => (
+    <div className='relative mb-20 h-80 sm:h-[26rem] lg:absolute lg:inset-y-0 lg:right-0 lg:mb-0 lg:h-auto lg:w-[58%]'>
+      {/* the slanted picture area */}
+      <div className='absolute inset-y-0 -right-12 left-0 -skew-x-6 overflow-hidden shadow-2xl'>
+        {heroSlides.map((s, i) => {
+          const isActive = i === index
+          const isPrev = i === prev
+          return (
+            <div
+              key={s.src}
+              className={`absolute inset-y-0 -inset-x-10 skew-x-6 ${isActive ? `z-20 ${reveals[i % reveals.length]}` : isPrev ? 'z-10' : 'invisible'}`}
+            >
               <img
-                key={p.src}
-                src={p.src}
-                alt={p.alt}
+                src={s.src}
+                alt={s.alt}
                 decoding='async'
-                className={`absolute -left-[18%] top-0 h-full w-[140%] max-w-none skew-x-6 animate-kenburns object-cover transition-opacity duration-[1400ms] ${j === current ? 'opacity-100' : 'opacity-0'}`}
-                style={{
-                  objectPosition: p.pos,
-                  transformOrigin: ['30% 40%', '70% 60%', '50% 30%'][i],
-                  animationDelay: `${i * -5}s`,
-                  translate: `calc(var(--px, 0) * ${(i + 1) * -16}px) 0`,
-                }}
+                fetchPriority={i === 0 ? 'high' : 'auto'}
+                className={`size-full object-cover ${isActive || isPrev ? 'animate-zoom' : ''}`}
+                style={{ objectPosition: s.pos, transformOrigin: s.origin }}
               />
-            ))}
-            <div className='absolute inset-0 bg-linear-to-t from-navy-950/70 via-navy-900/10 to-navy-700/40' />
-            <span
-              className='pointer-events-none absolute inset-y-0 left-0 w-1 animate-sheen'
-              style={{ backgroundImage: 'linear-gradient(180deg, transparent 0%, #fff 45%, transparent 55%)', backgroundSize: '100% 300%' }}
-            />
-          </div>
-        )
-      })}
+            </div>
+          )
+        })}
+        {/* colour washes over the pictures */}
+        <div className='pointer-events-none absolute inset-0 z-30 bg-linear-to-t from-navy-950/60 via-transparent to-navy-800/30' />
+        <div className='pointer-events-none absolute inset-0 z-30 bg-[radial-gradient(ellipse_at_100%_100%,rgba(240,185,46,0.28),transparent_60%)]' />
+      </div>
+
+      {/* the live line between the text and the pictures */}
+      <span className='pointer-events-none absolute inset-y-0 left-0 z-30 w-24 -skew-x-6 bg-linear-to-r from-gold-400/30 via-blue-400/10 to-transparent' aria-hidden='true' />
+      <span
+        className='pointer-events-none absolute inset-y-0 left-0 z-40 w-[7px] -skew-x-6 animate-glow overflow-hidden'
+        style={{ background: 'linear-gradient(180deg,#f6cb55 0%,#ffffff 38%,#6f93ff 72%,#1a3aa8 100%)' }}
+        aria-hidden='true'
+      >
+        <span
+          className='absolute inset-0 animate-sheen'
+          style={{ backgroundImage: 'linear-gradient(180deg, transparent 0%, rgba(255,255,255,.95) 45%, transparent 55%)', backgroundSize: '100% 300%' }}
+        />
+      </span>
+      <span className='pointer-events-none absolute inset-y-0 left-4 z-40 w-0.5 -skew-x-6 bg-linear-to-b from-transparent via-white/70 to-transparent' aria-hidden='true' />
+
+      {/* progress dots */}
+      <div className='absolute bottom-28 left-1/2 z-40 flex -translate-x-1/2 gap-2 lg:left-auto lg:right-12 lg:translate-x-0' role='group' aria-label='Hero pictures'>
+        {heroSlides.map((s, i) => (
+          <button
+            key={s.src}
+            type='button'
+            onClick={() => goTo(i)}
+            aria-label={`Show picture ${i + 1}`}
+            aria-current={i === index}
+            className='relative h-2 w-10 overflow-hidden rounded-full bg-white/35'
+          >
+            {i === index && (
+              <span
+                key={index}
+                className='absolute inset-0 origin-left animate-progress rounded-full bg-linear-to-r from-gold-400 to-white'
+                style={{ animationDuration: `${TICK_MS}ms` }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   )
 }
 
 function Hero() {
-  const ref = useRef(null)
-  const paused = useRef(false)
-  const [tick, setTick] = useState(0)
-  const [spotlight, setSpotlight] = useState(0)
+  const [index, setIndex] = useState(0)
+  const [prev, setPrev] = useState(null)
+  const current = useRef(0)
 
-  useEffect(() => {
-    const id = setInterval(() => { if (!paused.current) setTick((t) => t + 1) }, TICK_MS)
-    return () => clearInterval(id)
-  }, [])
-  useEffect(() => { setSpotlight(tick % heroPanels.length) }, [tick])
-
-  const onMove = (e) => {
-    const r = ref.current.getBoundingClientRect()
-    ref.current.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3))
+  const goTo = (n) => {
+    if (n === current.current) return
+    setPrev(current.current)
+    current.current = n
+    setIndex(n)
   }
 
+  // after each picture's time is up, move to the next one (and start over after the last)
+  useEffect(() => {
+    const id = setTimeout(() => goTo((current.current + 1) % heroSlides.length), TICK_MS)
+    return () => clearTimeout(id)
+  }, [index])
+
   return (
-    <section
-      ref={ref}
-      onPointerMove={onMove}
-      onPointerEnter={() => { paused.current = true }}
-      onPointerLeave={() => { paused.current = false }}
-      className='relative isolate overflow-hidden bg-navy-950 text-white'
-    >
+    <section className='relative isolate overflow-hidden bg-navy-950 text-white'>
       <div className='absolute inset-0 -z-10 bg-linear-to-br from-navy-950 via-navy-900 to-navy-800' />
       <div className='absolute inset-0 -z-10 opacity-40' style={{ backgroundImage: 'radial-gradient(circle, rgba(120,160,255,.55) 1px, transparent 1.5px)', backgroundSize: '28px 28px' }} />
-      <div className='absolute -left-24 top-10 -z-10 size-72 animate-float rounded-full bg-gold-400/20 blur-3xl' />
+      <div className='absolute -left-24 top-10 -z-10 size-80 animate-float rounded-full bg-gold-400/25 blur-3xl' />
+      <div className='absolute bottom-0 left-1/3 -z-10 size-96 animate-float rounded-full bg-blue-500/25 blur-3xl' style={{ animationDelay: '-3s' }} />
 
-      <div className='mx-auto grid max-w-7xl items-center gap-10 px-5 pb-32 pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:pt-16'>
-        <div className='relative z-10'>
+      <div className='mx-auto flex max-w-7xl flex-col gap-10 px-5 pb-8 pt-12 lg:min-h-[46rem] lg:justify-center lg:pb-56 lg:pt-16'>
+        <div className='relative z-10 max-w-xl lg:w-[42%]'>
           <div className='mb-6 flex items-center gap-2' aria-hidden='true'>
             <span className='h-0.5 w-12 bg-gold-400' />
             <span className='h-0.5 w-6 bg-gold-400/60' />
           </div>
           <h1 className='animate-fade-up text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl'>
             Empowering Zimbabwe’s
-            <span className='block bg-linear-to-r from-gold-400 via-gold-300 to-gold-500 bg-clip-text text-transparent'>Digital Future</span>
+            <span className='block animate-gradient bg-[linear-gradient(90deg,#f0b92e,#f6cb55,#ffffff,#f6cb55,#f0b92e)] bg-[length:200%_auto] bg-clip-text text-transparent'>
+              Digital Future
+            </span>
           </h1>
           <p className='mt-6 max-w-lg animate-fade-up text-lg text-blue-100/90' style={{ animationDelay: '0.15s' }}>
             Advancing ICT professionals, promoting innovation and shaping the future of computing in Zimbabwe.
           </p>
-          <div className='mt-8 flex flex-wrap gap-4 animate-fade-up' style={{ animationDelay: '0.3s' }}>
+          <div className='mt-8 flex animate-fade-up flex-wrap gap-4' style={{ animationDelay: '0.3s' }}>
             <Link to='/members/about-membership' className={goldButton}>Become a Member <ArrowRight size={18} /></Link>
             <Link to='/about-us/our-ethos' className='inline-flex items-center gap-2 rounded-full border-2 border-white/70 px-6 py-3 font-bold transition hover:bg-white hover:text-navy-900'>
               <Play size={14} fill='currentColor' /> Discover CSZ
@@ -115,19 +137,7 @@ function Hero() {
           </div>
         </div>
 
-        <HeroPanels tick={tick} spotlight={spotlight} onPick={setSpotlight} />
-      </div>
-
-      <div className='absolute bottom-24 left-1/2 flex -translate-x-1/2 gap-2'>
-        {heroPanels.map((_, i) => (
-          <button
-            key={i}
-            type='button'
-            onClick={() => setSpotlight(i)}
-            aria-label={`Highlight picture ${i + 1}`}
-            className={`h-2 rounded-full transition-all ${spotlight === i ? 'w-8 bg-gold-400' : 'w-2 bg-white/60'}`}
-          />
-        ))}
+        <HeroSlides index={index} prev={prev} goTo={goTo} />
       </div>
     </section>
   )
@@ -178,9 +188,13 @@ const stats = [
 
 function StatsBand() {
   return (
-    <section className='relative mt-12 overflow-hidden bg-linear-to-r from-gold-400 via-gold-300 to-gold-400 text-navy-950'>
-      <div className='absolute -right-10 top-0 h-full w-40 skew-x-[-20deg] bg-navy-900' />
-      <div className='relative mx-auto grid max-w-7xl grid-cols-2 gap-6 px-5 py-8 lg:grid-cols-4 lg:pr-48'>
+    <section className='relative mt-12 overflow-hidden bg-linear-to-r from-gold-400 via-gold-300 to-cream text-navy-950 lg:bg-[linear-gradient(90deg,#f0b92e_0%,#f6cb55_24%,#fff0b8_44%,#b9cbff_66%,#3a5fd0_84%,#0a1a5c_100%)]'>
+      {/* a soft light that sweeps across the band */}
+      <div className='pointer-events-none absolute inset-y-0 left-0 w-1/4 animate-sweep skew-x-[-20deg] bg-linear-to-r from-transparent via-white/45 to-transparent' />
+      {/* slanted gradient lines near the blue end */}
+      <div className='pointer-events-none absolute inset-y-0 right-24 hidden w-1.5 skew-x-[-20deg] bg-linear-to-b from-gold-300 via-white to-blue-400 lg:block' />
+      <div className='pointer-events-none absolute inset-y-0 right-32 hidden w-px skew-x-[-20deg] bg-white/50 lg:block' />
+      <div className='relative mx-auto grid max-w-7xl grid-cols-2 gap-6 px-5 py-8 lg:grid-cols-4 lg:pr-[30%]'>
         {stats.map(({ Icon, value, label }) => (
           <div key={label} className='flex items-center gap-4'>
             <Icon size={44} strokeWidth={1.5} />
