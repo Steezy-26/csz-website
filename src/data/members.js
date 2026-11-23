@@ -38,4 +38,47 @@ const rows = [
   ['HIT', '2019/04/HIT-wide.png'],
 ]
 
-export const institutionalMembers = rows.map(([name, path]) => ({ name, path, file: path.split('/').pop() }))
+const websites = {
+  Spellbound: 'https://spellboundelectronics.com',
+  iCraft: 'https://icraftzim.com',
+  'Chinhoyi University of Technology': 'https://cut.ac.zw',
+  'Belina Time Systems': 'https://belinapayroll.com',
+  'TM Pick N Pay': 'https://tmpnponline.co.zw',
+  eSolutions: 'https://esolutions.co.zw',
+  'Covenant Technologies': 'https://covenanttech.co.zw',
+  ZCHPC: 'https://zchpc.ac.zw',
+  'Zimbabwe Open University': 'https://zou.ac.zw',
+  'AFC Holdings': 'https://afc.co.zw',
+  'Axis Solution': 'https://axissol.com',
+  'Chips Enterprise Solutions': 'https://chips.co.zw',
+  Compulink: 'https://compulink.co.zw',
+  'Delta Corporation': 'https://delta.co.zw',
+  POSB: 'https://posb.co.zw',
+  DFA: 'https://afinet.africa',
+  MIPF: 'https://mipf.co.zw',
+  'Omni Africa': 'https://omni4africa.com',
+  'African Sun': 'https://africansun.com',
+  'FineArt Technologies': 'https://fineart.co.zw',
+  'Kenac Computer Systems': 'https://kenac.co.zw',
+  'Info Relay Systems': 'https://irs.co.zw',
+  'PPC Zimbabwe': 'https://ppc.africa',
+  'ProComm Technologies': 'https://procomm.cloud',
+  'RiverBird Technology Partners': 'https://riverbird.tech',
+  'SonicSignal Technology': 'https://sonicsignals.co.zw',
+  'Ernst and Young': 'https://ey.com/en_zw',
+  'First Mutual Health': 'https://firstmutualclinic.co.zw',
+  'Hwange Colliery Company': 'https://hwangecolliery.co.zw',
+  'City Parking': 'https://cityparking.co.zw',
+  COH: 'https://hararecity.co.zw',
+  CIMAS: 'https://cimas.co.zw',
+  'Bulawayo City Council': 'https://citybyo.co.zw',
+  'African Distillers': 'https://afdis.co.zw',
+  HIT: 'https://hit.ac.zw',
+}
+
+export const institutionalMembers = rows.map(([name, path]) => ({
+  name,
+  path,
+  file: path.split('/').pop(),
+  website: websites[name] || null,
+}))

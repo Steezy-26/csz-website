@@ -274,17 +274,29 @@ function MembersSection() {
           <Handshake size={18} /> Our Institutional Members
         </span>
         <Marquee seconds={institutionalMembers.length * 3}>
-          {institutionalMembers.map((m) => (
-            <div key={m.name} className='flex h-20 w-40 shrink-0 items-center justify-center rounded-xl border border-black/5 bg-white p-3 shadow-sm'>
-              <img
-                src={memberLogo(m.file)}
-                alt={m.name}
-                loading='lazy'
-                onError={(e) => { e.currentTarget.parentElement.style.display = 'none' }}
-                className='max-h-full max-w-full object-contain grayscale transition duration-300 hover:grayscale-0'
-              />
-            </div>
-          ))}
+          {institutionalMembers.map((m) => {
+            const Tag = m.website ? 'a' : 'div'
+            return (
+              <Tag
+                key={m.name}
+                {...(m.website ? {
+                  href: m.website,
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  'aria-label': `Visit ${m.name} website`,
+                } : {})}
+                className={`flex h-20 w-40 shrink-0 items-center justify-center rounded-xl border border-black/5 bg-white p-3 shadow-sm ${m.website ? 'transition hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500' : ''}`}
+              >
+                <img
+                  src={memberLogo(m.file)}
+                  alt={m.name}
+                  loading='lazy'
+                  onError={(e) => { e.currentTarget.parentElement.style.display = 'none' }}
+                  className='max-h-full max-w-full object-contain grayscale transition duration-300 hover:grayscale-0'
+                />
+              </Tag>
+            )
+          })}
         </Marquee>
       </div>
     </section>

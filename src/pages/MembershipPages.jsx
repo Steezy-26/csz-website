@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Download, FileText } from 'lucide-react'
 import PageHero from '@/components/PageHero'
+import MembershipNavigation from '@/components/MembershipNavigation'
 import Reveal from '@/components/Reveal'
 import { membershipTypes, benefitsIntro, benefits, documents } from '@/data/content'
 
@@ -10,6 +11,7 @@ export function AboutMembership() {
   return (
     <>
       <PageHero eyebrow='Membership' title='About membership' />
+      <MembershipNavigation />
       <section className='bg-white py-16'>
         <div className='mx-auto max-w-4xl px-5'>
           <h2 className='text-3xl font-extrabold'>Membership types</h2>
@@ -38,6 +40,7 @@ export function Benefits() {
   return (
     <>
       <PageHero eyebrow='Membership' title='Member benefits' />
+      <MembershipNavigation />
       <section className='bg-linear-to-b from-white to-cream py-16'>
         <div className='mx-auto max-w-6xl px-5'>
           <p className='max-w-3xl text-lg'>{benefitsIntro}</p>
