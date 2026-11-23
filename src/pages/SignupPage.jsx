@@ -1,5 +1,6 @@
 import { ClipboardList, FileCheck, UserCheck, Wallet } from 'lucide-react'
 import PageHero from '@/components/PageHero'
+import MembershipNavigation from '@/components/MembershipNavigation'
 import TallyEmbed from '@/components/TallyEmbed'
 import { TALLY } from '@/data/tally'
 
@@ -22,6 +23,7 @@ export default function SignupPage({ type = 'individual' }) {
   return (
     <>
       <PageHero eyebrow='Membership' title={title} />
+      <MembershipNavigation />
       <section className='bg-linear-to-b from-white to-cream px-5 py-12'>
         <div className='mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1fr_20rem]'>
           <div className='rounded-3xl bg-white p-4 shadow-lg ring-1 ring-black/5 sm:p-8'>

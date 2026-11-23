@@ -1,5 +1,17 @@
 // Menu groups follow the new design: Home, About Us, Membership, Events, News & Media, Resources, Contact Us.
 // Every page keeps its address from the old site, so existing links still work.
+const membershipOverviewLinks = [
+  ['About Membership', '/members/about-membership'],
+  ['Member Benefits', '/computer-society-of-zimbabwe-member-benefits'],
+]
+
+const membershipSignupLinks = [
+  ['Individual Signup', '/membership/individual-signup'],
+  ['Institutional Signup', '/membership/institutional-signup'],
+]
+
+export const membershipLinks = [...membershipOverviewLinks, ...membershipSignupLinks]
+
 export const nav = [
   { label: 'Home', to: '/' },
   { label: 'About Us', menu: [
@@ -11,8 +23,8 @@ export const nav = [
     ] },
   ] },
   { label: 'Membership', menu: [
-    { links: [['About Membership', '/members/about-membership'], ['Member Benefits', '/computer-society-of-zimbabwe-member-benefits']] },
-    { title: 'Sign up', links: [['Individual Signup', '/membership/individual-signup'], ['Institutional Signup', '/membership/institutional-signup']] },
+    { links: membershipOverviewLinks },
+    { title: 'Sign up', links: membershipSignupLinks },
   ] },
   { label: 'Events', menu: [{ links: [
     ['All Events', '/media/events'], ['Summit 2026', '/media/events/summit-2026'],
