@@ -65,7 +65,7 @@ function MobileNav({ open, onClose }) {
   return (
     <div className='fixed inset-0 z-50 overflow-y-auto bg-navy-950/95 px-6 py-6 text-white xl:hidden' role='dialog' aria-modal='true'>
       <div className='flex items-center justify-between'>
-        <Logo dark />
+        <Logo />
         <button type='button' onClick={onClose} aria-label='Close menu' className='rounded-full p-2 hover:bg-white/10'>
           <X size={28} />
         </button>

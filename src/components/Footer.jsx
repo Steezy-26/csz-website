@@ -11,7 +11,7 @@ export default function Footer() {
       <div className='pointer-events-none absolute -bottom-28 -right-28 h-64 w-96 rounded-full bg-linear-to-tl from-gold-400/50 to-transparent' />
       <div className='relative mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1.2fr_1fr]'>
         <div>
-          <Logo dark />
+          <Logo />
           <p className='mt-5 italic'>Advancing ICT Professionalism in Zimbabwe</p>
           <div className='mt-3 h-1 w-28 rounded bg-gold-400' />
           <ul className='mt-6 flex gap-3'>
